@@ -24,3 +24,6 @@ wget -O index.html http://orteil.dashnet.org/cookieclicker/
 wget -O style.css http://orteil.dashnet.org/cookieclicker/style.css
 wget -N -i _jslist.txt -B http://orteil.dashnet.org/cookieclicker/
 wget -O grab.txt http://orteil.dashnet.org/patreon/grab.php
+grep -Po 'url\(\K/cf-fonts/[^)]+' index.html > _fontlist.txt
+wget -x -nH -N -i _fontlist.txt -B http://orteil.dashnet.org
+sed -i 's|url(/cf-fonts/|url(cf-fonts/|g' index.html

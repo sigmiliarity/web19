@@ -40,17 +40,23 @@ Similarly, from the root :
 * `grep -v PARENTDIR index.html | grep '\[TXT' | grep -Po 'a href="\K.*?(?=")' | sed 's/\?.*//' > _loclist.txt`
 * `wget --user-agent="$USER" -i _loclist.txt http://orteil.dashnet.org/cookieclicker/loc/`
 
-#### 4. Update `js` and `html` files :
+#### 4. Fetch `js`, `html`, `css` and fonts :
 
 From the root directory :
 
 * Fetch the updated `index.html` file: `wget --user-agent="$USER" -O index.html http://orteil.dashnet.org/cookieclicker/` 
 * Fetch the updated `style.css` file: `wget --user-agent="$USER" -O style.css http://orteil.dashnet.org/cookieclicker/style.css`
 * Fetch updated `js` files : `wget --user-agent="$USER" -i _jslist.txt -B http://orteil.dashnet.org/cookieclicker/`
+* Extract font URLs from `index.html`: `grep -Po 'url\(\K/cf-fonts/[^)]+' index.html > _fontlist.txt`
+* Download the fonts: `wget --user-agent="$USER" -x -nH -N -i _fontlist.txt -B http://orteil.dashnet.org`
+
+#### 5. Update `js` and `html` files :
+
 * Scan `index.html` for any new `<script src` and also `main.js` for any new local javascript (eg `Game.last.minigameUrl`). If there are new scripts, update the `_jslist.txt` accordingly.
 * In `main.js` there is a nonfunctional URL we need to change: 
   * Find `DataDir=window.location.origin+'/data/';`, and change to `DataDir='https://orteil.dashnet.org/data/';`
+* Fix font URLs in `index.html` to be local: `sed -i 's|url(/cf-fonts/|url(cf-fonts/|g' index.html`
 
-#### 5. Report update here :)
+#### 6. Report update here :)
 
 If you happen to update, please make a pull request for others to benefit, thanks!
